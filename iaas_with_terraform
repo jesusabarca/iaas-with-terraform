@@ -1,0 +1,80 @@
+# Infrastructure as a service
+# with terraform
+
+- Emerson Posadas
+- twitter: @toxickore
+- toxickore@gmail.com
+- https://github.com/toxickore/iaas-with-terraform
+
+
+# Assumptions
+
+- Basic knowledge on AWS services (EC2, VPC)
+- Have an active AWS account (for those following the examples)
+- Internet connectivity
+
+
+# What is terraform
+
+- Terraform enables you to safely and predictably create, change, and improve production infrastructure. 
+- It is an open source tool
+- Can be shared amongst team members, treated as code, edited, reviewed, and versioned.
+
+
+# Configure AWS credentials
+
+- apt-get install awscli
+- ~/.aws/credentials
+- ~/.aws/config
+- C:\Users\USERNAME \.aws\credentials
+- C:\Users\USERNAME \.aws\config
+
+
+# Download terraform
+
+- https://www.terraform.io/downloads.html
+- https://releases.hashicorp.com/terraform/0.8.7/terraform_0.8.7_darwin_amd64.zip?_ga=1.172790753.359523986.1473713539
+- https://releases.hashicorp.com/terraform/0.8.7/terraform_0.8.7_linux_amd64.zip?_ga=1.172790753.359523986.1473713539
+- https://releases.hashicorp.com/terraform/0.8.7/terraform_0.8.7_openbsd_amd64.zip?_ga=1.172790753.359523986.1473713539
+- https://releases.hashicorp.com/terraform/0.8.7/terraform_0.8.7_freebsd_amd64.zip?_ga=1.172790753.359523986.1473713539
+- https://releases.hashicorp.com/terraform/0.8.7/terraform_0.8.7_windows_amd64.zip?_ga=1.172790753.359523986.1473713539
+
+
+# Install terraform
+```
+   $ unzip terraform_0.8.7_linux_amd64.zip
+```
+
+
+# Running terraform
+```
+   ./terraform plan
+   ./terraform apply
+   ./terraform show
+```
+
+
+# Our first terraform script
+- https://www.terraform.io/docs/providers/aws/r/instance.html
+
+```
+   provider "aws" {
+       region = "us-east-1"
+   }
+
+   resource "aws_instance" "web" {
+       ami = "ami-0b33d91d"
+       instance_type = "t2.micro" # Amazon Linux AMI 2016.09
+       tags {
+           Name = "HelloWorld"
+       }
+   }
+```
+
+
+# First code
+```
+   resource "aws_vpc" "example_vpc" {
+      cidr_block = "10.0.0.0/16"
+   {
+```
