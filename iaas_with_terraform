@@ -14,7 +14,7 @@
 - Internet connectivity
 
 
-# What is terraform
+# What is terraform?
 
 - Terraform enables you to safely and predictably create, change, and improve production infrastructure. 
 - It is an open source tool
@@ -72,9 +72,136 @@
 ```
 
 
-# First code
+# Adding my key
 ```
-   resource "aws_vpc" "example_vpc" {
-      cidr_block = "10.0.0.0/16"
-   {
+   provider "aws" {
+       region = "us-east-1"
+   }
+
+   resource "aws_instance" "web" {
+       ami = "ami-0b33d91d"
+       instance_type = "t2.micro" # Amazon Linux AMI 2016.09
+       key_name = "emerson"
+       tags {
+           Name = "HelloWorld"
+       }
+   }
 ```
+
+
+# Adding a security group
+```
+   provider "aws" {
+       region = "us-east-1"
+   }
+
+   resource "aws_instance" "web" {
+       ami = "ami-0b33d91d"
+       instance_type = "t2.micro" # Amazon Linux AMI 2016.09
+       key_name = "emerson"
+       tags {
+           Name = "HelloWorld"
+       }
+   }
+```
+
+
+# All together with variable names
+- variables.tf
+
+```
+   variable "ami" {
+      default = "ami-0b33d91d" # Amazon Linux AMI 2016.09
+   }
+
+   variable "instance_type" {
+      default = "t2.micro" # Free tier instance type
+   }
+
+   resource "aws_security_group" "sg01" {
+      name = "sg01"
+      description = "Allow ssh inbound traffic"
+      ingress {
+         from_port = 22
+         to_port = 22
+         protocol = "tcp"
+         cidr_blocks = ["0.0.0.0/0"]
+      }
+   }
+```
+
+
+# All together with variable names
+# (cont...)
+- first.tf
+
+```
+   provider "aws" {
+      region = "us-east-1"
+   }
+
+   resource "aws_instance" "web" {
+      ami = "${var.ami}"
+      instance_type = "${var.instance_type}"
+      key_name = "emerson"
+      security_groups = ["sg01"]
+      tags {
+          Name = "HelloWorld"
+      }
+   }
+```
+
+
+# Example with more resources
+```
+resource "aws_vpc" "awesome_vpc" {
+   cidr_block = "10.0.0.0/16"
+}
+
+resource "aws_subnet" "awesome_priv_sn01" {
+   vpc_id = "${aws_vpc.awesome_vpc.id}"
+   availability_zone = "us-east-1a"
+   cidr_block = "10.0.1.0/24"
+
+   tags {
+      Name = "priv_sn01"
+   }
+}
+
+resource "aws_subnet" "priv_sn02" {
+   vpc_id = "${aws_vpc.awesome_vpc.id}"
+   availability_zone = "us-east-1b"
+   cidr_block = "10.0.2.0/24"
+
+   tags {
+      Name = "priv_sn02"
+   }
+}
+
+resource "aws_security_group" "awesome_sg01" {
+   name = "awesome_sg01"
+   description = "Allow SSH inbout traffic"
+
+   ingress {
+      from_port = 22
+      to_port = 22
+      protocol = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+   }
+
+   vpc_id = "${aws_vpc.awesome_vpc.id}"
+}
+
+resource "aws_instance" "web" {
+    ami = "${var.ami}" # Amazon Linux AMI 2016.09
+    instance_type = "${var.instance_type}"
+    key_name = "${var.key_name}"
+    subnet_id = "${aws_subnet.priv_sn02.id}"
+    tags {
+        Name = "HelloWorld"
+    }
+}
+```
+
+
+# Q&A
