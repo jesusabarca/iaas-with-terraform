@@ -1,4 +1,5 @@
-# Infrastructure as a service
+# Infrastructure
+# as a service
 # with terraform
 
 - Emerson Posadas
@@ -21,7 +22,8 @@
 - Can be shared amongst team members, treated as code, edited, reviewed, and versioned.
 
 
-# Configure AWS credentials
+# Configure AWS
+# credentials
 
 - apt-get install awscli
 - ~/.aws/credentials
@@ -54,7 +56,8 @@
 ```
 
 
-# Our first terraform script
+# Our first
+# terraform script
 - https://www.terraform.io/docs/providers/aws/r/instance.html
 
 ```
@@ -89,7 +92,8 @@
 ```
 
 
-# Adding a security group
+# Adding a
+# security group
 ```
    provider "aws" {
        region = "us-east-1"
@@ -106,7 +110,8 @@
 ```
 
 
-# All together with variable names
+# All together
+# with variable names
 - variables.tf
 
 ```
@@ -131,7 +136,8 @@
 ```
 
 
-# All together with variable names
+# All together
+# with variable names
 # (cont...)
 - first.tf
 
@@ -152,7 +158,8 @@
 ```
 
 
-# Example with more resources
+# Example with
+# more resources
 ```
 resource "aws_vpc" "awesome_vpc" {
    cidr_block = "10.0.0.0/16"
